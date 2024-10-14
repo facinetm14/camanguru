@@ -1,4 +1,15 @@
 services:
+  db:
+    image: postgres:14
+    networks:
+      - camagru-network
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./back/.env
+    volumes:
+      - pgdata:/usr/src/pgdata/data
+
   back:
     build:
       context: ./back
@@ -19,16 +30,6 @@ services:
       - "8080:80"
     networks:
       - camagru-network
-  db:
-    image: postgres:14
-    networks:
-      - camagru
-    ports:
-      - "5432:5432"
-    env_file:
-      - ./back/.env
-    volumes:
-      - pgdata:/usr/src/pgdata/data
 
 volumes:
   pgdata:
