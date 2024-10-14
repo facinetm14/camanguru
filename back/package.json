@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "jest --watchAll",
+    "test": "tsc --project tsconfig.test.json && jest --watchAll",
     "build": "tsc",
     "start": "node dist/index.js"
   },
