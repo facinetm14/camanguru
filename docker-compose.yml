@@ -5,8 +5,10 @@ services:
       - camagru-network
     ports:
       - "5432:5432"
-    env_file:
-      - ./back/.env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWD}
+      POSTGRES_DB: ${DB_NAME}
     volumes:
       - pgdata:/usr/src/pgdata/data
 
@@ -19,7 +21,7 @@ services:
     depends_on:
       - db
     env_file:
-      - ./back/.env
+      - ./.env
     networks:
       - camagru-network
 

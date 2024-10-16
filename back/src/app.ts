@@ -1,5 +1,6 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { Gateway } from './routes/gateway';
+import { Gateway } from './adapters/routes/gateway';
+import { initDb } from './infrastructure/database/initDb';
 
 
 export class App {
@@ -8,7 +9,8 @@ export class App {
     }
     gateway: Gateway;
 
-    run(): void {
+    async run(): Promise<void> {
+        await initDb();
         this.gateway.dispatch(this.req, this.resp);    
     }
 }

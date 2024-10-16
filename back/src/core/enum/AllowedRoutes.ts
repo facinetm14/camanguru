@@ -1,5 +1,5 @@
 export enum AllowedRoutes {
-    BASE = '/',
-    AUTH = '/auth',
-    USERS = '/users' 
+  BASE = "",
+  AUTH = "auth",
+  USERS = "users",
 }
