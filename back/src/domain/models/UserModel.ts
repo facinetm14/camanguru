@@ -1,9 +1,9 @@
-export type User = {
+export type UserModel = {
   id: string;
   email: string;
   address: string;
   username: string;
   passwd: string;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  updated_at: Date;
 };

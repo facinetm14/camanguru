@@ -1,11 +1,6 @@
-import { BaseRouter } from "../../adapters/routes/baseRouter";
-import { UserController } from "../../adapters/controllers/UserController";
-import { UserRouter } from "../../adapters/routes/userRouter";
+import { DIContainer } from "../di/container";
+import { ModuleRegister } from "../enum/ModuleRegister";
 
-export function factoryUserRoute(): UserRouter {
-  return new UserRouter(new UserController());
-}
-
-export function factoryBaseRoute(): BaseRouter {
-  return new BaseRouter();
+export function factoryModule(module: ModuleRegister) {
+  return DIContainer.resolve(module);
 }

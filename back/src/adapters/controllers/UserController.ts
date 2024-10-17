@@ -1,21 +1,46 @@
 import { IncomingMessage, ServerResponse } from "http";
+import { UserService } from "../../application/services/userService";
+import { ResponseStatusCode } from "../../core/enum/ResponseStatusCode";
+import { InputToController } from "../../core/types/inputToController";
+import { User } from "../../domain/entities/User";
+import { CreateUserDto } from "../../application/dtos/createUserDto";
 
 export class UserController {
-  constructor() {}
+  constructor(private userService: UserService) {}
 
-  async findAll(req: IncomingMessage, resp: ServerResponse, params?: {}): Promise<void> {
-    resp.statusCode = 200;
+  async findAll({ resp }: InputToController): Promise<void> {
+    resp.statusCode = ResponseStatusCode.GET_OK;
     resp.setHeader("Content-Type", "application/json");
-    const users = Promise.resolve([
-      {
-        name: "Tom",
-        email: "tom@wc",
-      },
-      {
-        name: "Tom",
-        email: "tom@wc",
-      },
-    ]);
+
+    const users = await this.userService.findAll();
+
     resp.end(JSON.stringify(users));
+  }
+
+  async create({ req, resp }: InputToController): Promise<void> {
+    let body = "";
+    let createUserDto: CreateUserDto;
+
+    req?.on("data", (chunk) => {
+      body += chunk.toString();
+    });
+
+    req?.on("end", () => {
+      (async () => {
+        try {
+          createUserDto = JSON.parse(body);
+          const newUser = await this.userService.create(createUserDto);
+          if (!newUser) {
+            resp.statusCode = ResponseStatusCode.SERVER_INTERNAL_ERROR;
+            resp.end();
+            return;
+          }
+          resp.end(JSON.stringify(newUser));
+        } catch (error) {
+          resp.statusCode = ResponseStatusCode.BAD_REQUEST;
+          resp.end();
+        }
+      })();
+    });
   }
 }

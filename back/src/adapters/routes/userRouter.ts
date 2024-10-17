@@ -4,9 +4,16 @@ import { UserController } from "../../adapters/controllers/UserController";
 import { RequestError } from "../../core/enum/RequestError";
 import { InputError } from "../../core/errors/inputError";
 import { IRouter } from "./IRouter";
+import { ResponseStatusCode } from "../../core/enum/ResponseStatusCode";
+import { InputToController } from "../../core/types/inputToController";
 
 export class UserRouter extends RouterStrategy implements IRouter {
-  private routes: [{ pattern: string; method: string; handler: Function }];
+  private routes: {
+    pattern: string;
+    method: string;
+    middleWare?: (input: InputToController) => Promise<void>[]
+    handler: (input: InputToController) => Promise<void>;
+  }[];
 
   constructor(private userController: UserController) {
     super();
@@ -15,6 +22,11 @@ export class UserRouter extends RouterStrategy implements IRouter {
         pattern: "/users",
         method: "GET",
         handler: this.userController.findAll,
+      },
+      {
+        pattern: "/users",
+        method: "POST",
+        handler: this.userController.create,
       },
     ];
   }
@@ -36,16 +48,18 @@ export class UserRouter extends RouterStrategy implements IRouter {
 
       if (params && route.method === req.method) {
         matchedMethod = true;
-        return route.handler(req, resp, params);
+        route.handler.call(this.userController, { req, resp, params });
       }
     }
 
     if (!matchedRoute) {
-      throw new InputError({ name: RequestError.NOT_FOUND });
+      resp.statusCode = ResponseStatusCode.NOT_FOUND;
+      resp.end();
     }
 
     if (!matchedMethod) {
-      throw new InputError({ name: RequestError.METHOD_NOT_ALLOWED });
+      resp.statusCode = ResponseStatusCode.METHOD_NOT_ALLOWED;
+      resp.end();
     }
   }
 }
