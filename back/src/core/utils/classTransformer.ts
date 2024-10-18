@@ -1,7 +1,7 @@
 import { CreateUserDto } from "../../application/dtos/createUserDto";
 import { User } from "../../domain/entities/User";
 import { UserModel } from "../../domain/models/UserModel";
-import { hashPassword } from "./passwdHash";
+import { hashPassword } from "./password";
 import { uuid } from "./uuid";
 
 export function buildUserListFromRawModel(userRawList: UserModel[]): User[] {
