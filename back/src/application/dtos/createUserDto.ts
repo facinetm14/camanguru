@@ -1,7 +1,7 @@
 export type CreateUserDto = {
   id?: string;
   email: string;
-  address: string;
+  adress: string;
   username: string;
   passwd: string;
   createdAt?: Date;

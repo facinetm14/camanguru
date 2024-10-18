@@ -22,11 +22,11 @@ export class UserConCreteService implements UserService {
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const newUser = await buildUserModelFromCreateUserDto(createUserDto);
-
-    const createdUser = await this.userRepository.create(newUser);
-    if (!createUserDto) {
-      throw new Error ('Error user creation');
+    try {
+      const createdUser = await this.userRepository.create(newUser);
+      return buildUserEntityFromModel(createdUser);
+    } catch (error) {
+      throw new Error("Error: failled to create a user");
     }
-    return buildUserEntityFromModel(createdUser);
   }
 }

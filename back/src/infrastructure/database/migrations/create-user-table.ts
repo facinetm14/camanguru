@@ -5,7 +5,7 @@ const query = `
             username VARCHAR(50) UNIQUE NOT NULL,
             passwd VARCHAR(255) NOT NULL,
             email VARCHAR(60) UNIQUE NOT NULL,
-            address VARCHAR(60) NOT NULL,
+            adress VARCHAR(60) NOT NULL,
             created_at TIMESTAMP DEFAULT NOW(),
             updated_at TIMESTAMP DEFAULT NOW()
         );

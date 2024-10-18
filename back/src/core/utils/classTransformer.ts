@@ -15,19 +15,20 @@ export function buildUserEntityFromModel(userModel: UserModel): User {
     updatedAt: userModel.updated_at,
     createdAt: userModel.created_at,
     email: userModel.email,
-    address: userModel.address,
+    adress: userModel.adress,
   };
 }
 
 export const buildUserModelFromCreateUserDto = async (
   createUserDto: CreateUserDto
 ): Promise<UserModel> => {
-  const passwd = await hashPassword(createUserDto.passwd);
+  //const passwd = await hashPassword(createUserDto.passwd);
+  const passwd = "blabla123";
   return {
-    id: uuid(),
+    id: uuid("user"),
     username: createUserDto.username,
     email: createUserDto.email,
-    address: createUserDto.address,
+    adress: createUserDto.adress,
     passwd,
     created_at: new Date(),
     updated_at: new Date(),
