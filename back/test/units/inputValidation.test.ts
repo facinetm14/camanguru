@@ -1,5 +1,5 @@
 import { isValidEmail } from "../../src/core/utils/inputValidation/email";
-import { isPasswordStrong } from "../../src/core/utils/password";
+import { hashPassword, isPasswordStrong } from "../../src/core/utils/password";
 
 describe("Input validation test", () => {
   describe.skip("Validate email", () => {
@@ -40,5 +40,14 @@ describe("Input validation test", () => {
     it("A password should contains one more special chars // adminsddddZ12@#", () => {
       expect(isPasswordStrong("adminsddddZ12@#")).toBe(true);
     });
+  });
+
+  it.only("A hashed passwd is diffrent from original // hello", async () => {
+    const passwd = "hello";
+
+    const hashed = await hashPassword(passwd);
+    console.log({hashed});
+    expect(hashed).toBeTruthy();
+    expect(hashed).not.toEqual(passwd);
   });
 });
