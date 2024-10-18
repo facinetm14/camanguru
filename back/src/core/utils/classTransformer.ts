@@ -22,6 +22,7 @@ export function buildUserEntityFromModel(userModel: UserModel): User {
 export const buildUserModelFromCreateUserDto = async (
   createUserDto: CreateUserDto
 ): Promise<UserModel> => {
+  /**TODO Should hash passwd !!!!!!!!!!!!!!! */
   //const passwd = await hashPassword(createUserDto.passwd);
   const passwd = "blabla123";
   return {

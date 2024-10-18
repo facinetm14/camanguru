@@ -4,6 +4,7 @@ import { ResponseStatusCode } from "../../core/enum/ResponseStatusCode";
 import { InputToController } from "../../core/types/inputToController";
 import { User } from "../../domain/entities/User";
 import { CreateUserDto } from "../../application/dtos/createUserDto";
+import { isValidEmail } from "../../core/utils/inputValidation/email";
 
 export class UserController {
   constructor(private userService: UserService) {}
@@ -29,6 +30,11 @@ export class UserController {
       (async () => {
         try {
           createUserDto = JSON.parse(body);
+          if (!isValidEmail(createUserDto.email)) {
+            resp.statusCode = ResponseStatusCode.BAD_REQUEST;
+            resp.end('Invalid user email');
+            return ;
+          }
           const newUser = await this.userService.create(createUserDto);
           if (!newUser) {
             resp.statusCode = ResponseStatusCode.SERVER_INTERNAL_ERROR;
