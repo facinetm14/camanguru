@@ -1,0 +1,16 @@
+### get user by id
+GET http://localhost:5000/users
+
+### create a user
+POST http://localhost:5000/users
+content-type: application/json
+
+{
+ "username": "toto1",
+ "email": "test1@gmail.com",
+ "adress": "test",
+ "passwd": "admin123"
+}
+
+### get all users
+GET http://localhost:5000
