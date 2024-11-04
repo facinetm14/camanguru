@@ -1,5 +1,7 @@
 FROM nginx:alpine
 
-COPY . /usr/share/nginx/html
+COPY config/nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
+COPY public/ /usr/share/nginx/html
+
+EXPOSE 5000
