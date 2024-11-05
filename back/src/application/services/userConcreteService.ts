@@ -26,6 +26,7 @@ export class UserConCreteService implements UserService {
       const createdUser = await this.userRepository.create(newUser);
       return buildUserEntityFromModel(createdUser);
     } catch (error) {
+      console.log(error);
       throw new Error("Error: failled to create a user");
     }
   }

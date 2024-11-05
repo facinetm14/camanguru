@@ -11,7 +11,7 @@ export class UserRouter extends RouterStrategy implements IRouter {
   private routes: {
     pattern: string;
     method: string;
-    middleWare?: (input: InputToController) => Promise<void>[]
+    middleWare?: (input: InputToController) => Promise<void>[];
     handler: (input: InputToController) => Promise<void>;
   }[];
 
@@ -40,6 +40,7 @@ export class UserRouter extends RouterStrategy implements IRouter {
     let matchedMethod = false;
 
     for (const route of this.routes) {
+      console.log({ route, url: req.url });
       const params = this.matchRoutePatterns(req.url ?? "", route.pattern);
 
       if (params) {
