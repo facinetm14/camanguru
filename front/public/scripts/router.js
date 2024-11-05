@@ -1,9 +1,10 @@
 import { loadPage } from "./utils.js";
 
+const BASE_PATH_TO_PAGES = '../pages'
 const routes =  new Map([
-    ['/', '../pages/home.html'],
-    ['/profile', '../pages/profile.html'],
-    ['not_found', '../pages/404.html']
+    ['/', `${BASE_PATH_TO_PAGES}/home/home.html`],
+    ['/profile', `${BASE_PATH_TO_PAGES}../profile/profile.html`],
+    ['not_found', `${BASE_PATH_TO_PAGES}../404/404.html`]
 ]);
 
 export const routeUrl = async () =>  {
@@ -12,6 +13,5 @@ export const routeUrl = async () =>  {
     if (!routes.has(path)) {
         return loadPage(routes.get('not_found'));
     }
-
     return loadPage(routes.get(path));
 }
