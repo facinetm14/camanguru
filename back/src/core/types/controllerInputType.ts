@@ -1,7 +1,7 @@
 import { IncomingMessage, ServerResponse } from "http";
 
-export type InputToController = {
+export type ControllerInputType = {
   req?: IncomingMessage;
   resp: ServerResponse;
-  params?: {};
+  params?: Map<string, string>;
 };

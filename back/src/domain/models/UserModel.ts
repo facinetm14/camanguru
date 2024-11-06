@@ -1,3 +1,5 @@
+import { UserStatus } from "../../core/enum/User";
+
 export type UserModel = {
   id: string;
   email: string;
@@ -6,4 +8,7 @@ export type UserModel = {
   passwd: string;
   created_at: Date;
   updated_at: Date;
+  salt: string;
+  validation_token: string;
+  status: UserStatus;
 };

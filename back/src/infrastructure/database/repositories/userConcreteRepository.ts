@@ -1,17 +1,39 @@
 import { UserRepository } from "../../../domain/repositories/userRepository";
 import { pgClient } from "../dataSource";
 import { UserModel } from "../../../domain/models/UserModel";
+import { UserStatus, UserUniqKeys } from "../../../core/enum/User";
 
 export class UserConcreteRepository implements UserRepository {
   async create(user: UserModel): Promise<any> {
-    const { id, username, email, adress, passwd, created_at, updated_at } =
-      user;
+    const {
+      id,
+      username,
+      email,
+      adress,
+      passwd,
+      created_at,
+      updated_at,
+      salt,
+      status,
+      validation_token,
+    } = user;
 
     const insertQuery = {
       text: `
-        INSERT INTO users(id, username, email, adress, passwd, created_at, updated_at)
-        VALUES($1, $2, $3, $4, $5, $6, $7);`,
-      values: [id, username, email, adress, passwd, created_at, updated_at],
+        INSERT INTO users(id, username, email, adress, passwd, created_at, updated_at, salt, status, validation_token)
+        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`,
+      values: [
+        id,
+        username,
+        email,
+        adress,
+        passwd,
+        created_at,
+        updated_at,
+        salt,
+        status,
+        validation_token,
+      ],
     };
 
     const connexion = await pgClient.connect();
@@ -30,5 +52,39 @@ export class UserConcreteRepository implements UserRepository {
     const users = result["rows"];
 
     return users;
+  }
+
+  async findUserByUniqKey(
+    key: UserUniqKeys,
+    value: string
+  ): Promise<UserModel> {
+    const queryUser = {
+      text: `SELECT * FROM users WHERE ${key}=$1 LIMIT 1`,
+      values: [value],
+    };
+
+    const connexion = await pgClient.connect();
+    const result = await pgClient.query(queryUser);
+    connexion.release();
+    const user = result["rows"][0];
+
+    return user;
+  }
+
+  async updateStatusAndRemoveValidationToken(idUser: string): Promise<void> {
+    const updateQuery = {
+      text: `UPDATE users SET status=$1, validation_token=null WHERE id=$2`,
+      values: [UserStatus.VERIFIED, idUser],
+    };
+
+    const connexion = await pgClient.connect();
+    try {
+      const result = await pgClient.query(updateQuery);
+      const userUpdate = result["rows"];
+      console.log({ userUpdate });
+    } catch (error) {
+      console.log("Error: unable to update user", idUser);
+    }
+    connexion.release();
   }
 }
