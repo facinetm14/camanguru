@@ -12,7 +12,7 @@ export const compareHash = async (passwd: string, hashPasswd: string) => {
 export const isPasswordStrong = (passwd: string): boolean => {
   const rulePattern =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9_]).+$/;
-  if (passwd.length < 12 || passwd.length > 20) {
+  if (passwd.length < 12) {
     return false;
   }
   const passwdRegex = new RegExp(rulePattern);

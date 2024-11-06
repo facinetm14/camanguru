@@ -13,32 +13,35 @@ import { error } from "console";
 const hostname = process.env.HOST || "0.0.0.0";
 const port = process.env.PORT || 5000;
 
-initDb();
+(async () => {
+  await initDb();
+  const server = createServer((req: IncomingMessage, resp: ServerResponse) => {
+    DIContainer.registerClass(ModuleRegister.BASE_ROUTE, new BaseRouter());
+    DIContainer.registerClass(
+      ModuleRegister.USER_REPOSITORY,
+      new UserConcreteRepository()
+    );
+    DIContainer.registerClass(
+      ModuleRegister.USER_SERVICE,
+      new UserConCreteService(
+        DIContainer.resolve(ModuleRegister.USER_REPOSITORY)
+      )
+    );
+    DIContainer.registerClass(
+      ModuleRegister.USER_CONTROLLER,
+      new UserController(DIContainer.resolve(ModuleRegister.USER_SERVICE))
+    );
 
-const server = createServer((req: IncomingMessage, resp: ServerResponse) => {
-  DIContainer.registerClass(ModuleRegister.BASE_ROUTE, new BaseRouter());
-  DIContainer.registerClass(
-    ModuleRegister.USER_REPOSITORY,
-    new UserConcreteRepository()
-  );
-  DIContainer.registerClass(
-    ModuleRegister.USER_SERVICE,
-    new UserConCreteService(DIContainer.resolve(ModuleRegister.USER_REPOSITORY))
-  );
-  DIContainer.registerClass(
-    ModuleRegister.USER_CONTROLLER,
-    new UserController(DIContainer.resolve(ModuleRegister.USER_SERVICE))
-  );
+    DIContainer.registerClass(
+      ModuleRegister.USER_ROUTE,
+      new UserRouter(DIContainer.resolve(ModuleRegister.USER_CONTROLLER))
+    );
 
-  DIContainer.registerClass(
-    ModuleRegister.USER_ROUTE,
-    new UserRouter(DIContainer.resolve(ModuleRegister.USER_CONTROLLER))
-  );
+    const app = new App(req, resp);
+    app.run();
+  });
 
-  const app = new App(req, resp);
-  app.run();
-});
-
-server.listen(+port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+  server.listen(+port, hostname, () => {
+    console.log(`Server running at http://${hostname}:${port}/`);
+  });
+})();

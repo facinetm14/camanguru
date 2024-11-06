@@ -32,8 +32,8 @@ export class UserController {
           createUserDto = JSON.parse(body);
           if (!isValidEmail(createUserDto.email)) {
             resp.statusCode = ResponseStatusCode.BAD_REQUEST;
-            resp.end('Invalid user email');
-            return ;
+            resp.end("Invalid user email");
+            return;
           }
           const newUser = await this.userService.create(createUserDto);
           if (!newUser) {
@@ -45,6 +45,7 @@ export class UserController {
         } catch (error) {
           resp.statusCode = ResponseStatusCode.BAD_REQUEST;
           resp.end();
+          console.log(error);
         }
       })();
     });

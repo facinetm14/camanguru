@@ -1,6 +1,6 @@
 import { IncomingMessage, ServerResponse } from "http";
 import { RequestError } from "../../core/enum/RequestError";
-import { AllowedRoutes } from "../../core/enum/AllowedRoutes";
+import { AllowedRoutes, API_BASE } from "../../core/enum/AllowedRoutes";
 import { InputError } from "../../core/errors/inputError";
 import { ResponseStatusCode } from "../../core/enum/ResponseStatusCode";
 import { Router } from "../../core/types/router";
@@ -21,13 +21,19 @@ export class Gateway {
     );
   }
   async dispatch(req: IncomingMessage, resp: ServerResponse): Promise<void> {
-    const baseUrl = req.url?.split("/")[1] ?? "";
+    if (!req.url?.match(/^\/api\/v1\//)) {
+      resp.statusCode = ResponseStatusCode.NOT_FOUND;
+      return;
+    }
+
+    const baseRoute = req.url?.slice(API_BASE.length) ?? "";
+    console.log({ baseRoute });
     try {
-      this.sanitizeUrl(baseUrl);
+      this.sanitizeUrl(baseRoute);
       return this.resolveRoute(
         req,
         resp,
-        this.registry.get(baseUrl as AllowedRoutes)!
+        this.registry.get(baseRoute as AllowedRoutes)!
       );
     } catch (error) {
       if (error instanceof InputError && error.name == RequestError.NOT_FOUND) {
@@ -36,6 +42,7 @@ export class Gateway {
         }
       }
       resp.end();
+      console.log(error);
     }
   }
 
