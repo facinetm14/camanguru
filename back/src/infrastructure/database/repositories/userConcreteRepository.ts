@@ -79,9 +79,7 @@ export class UserConcreteRepository implements UserRepository {
 
     const connexion = await pgClient.connect();
     try {
-      const result = await pgClient.query(updateQuery);
-      const userUpdate = result["rows"];
-      console.log({ userUpdate });
+      await pgClient.query(updateQuery);
     } catch (error) {
       console.log("Error: unable to update user", idUser);
     }

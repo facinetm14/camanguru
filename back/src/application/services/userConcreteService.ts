@@ -21,8 +21,8 @@ export class UserConCreteService implements UserService {
     return buildUserListFromRawModel(userRawList);
   }
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const newUser = await buildUserModelFromCreateUserDto(createUserDto);
+  async create(createUserDto: CreateUserDto, validationToken: string): Promise<User> {
+    const newUser = await buildUserModelFromCreateUserDto(createUserDto, validationToken);
     try {
       const createdUser = await this.userRepository.create(newUser);
       return buildUserEntityFromModel(createdUser);
@@ -37,7 +37,6 @@ export class UserConCreteService implements UserService {
     value: string
   ): Promise<User | null> {
     const user = await this.userRepository.findUserByUniqKey(key, value);
-    console.log(user);
     if (!user) {
       return null;
     }

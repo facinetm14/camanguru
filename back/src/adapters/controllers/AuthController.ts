@@ -49,14 +49,10 @@ export class AuthController {
     const token = params.get("token")!;
 
     try {
-      const verifiedUser = this.authService.verify(token);
-      if (!verifiedUser) {
-        resp.statusCode = ResponseStatusCode.BAD_REQUEST;
-      } else {
-        resp.statusCode = ResponseStatusCode.CREATED_OK;
-      }
+      await this.authService.verify(token);
+      resp.statusCode = ResponseStatusCode.CREATED_OK;
     } catch (error) {
-      console.log("Error: unable to verify user");
+      console.log(`${error},  ${token}`);
       resp.statusCode = ResponseStatusCode.BAD_REQUEST;
     }
     resp.end();

@@ -11,7 +11,13 @@ const routes = new Map([
 export const routeUrl = async () => {
   const path = window.location.pathname;
 
+  if (path.match(/^\/activate\//)) {
+    localStorage.setItem("validationToken", path.split("/").at(-1));
+    return loadPage(routes.get("/"));
+  }
+
   if (!routes.has(path)) {
+    console.log("not_found");
     return loadPage(routes.get("not_found"));
   }
   return loadPage(routes.get(path));

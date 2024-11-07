@@ -5,3 +5,4 @@ export enum AllowedRoutes {
 }
 
 export const API_BASE = "/api/v1";
+export const CLIENT_HOST = "http://localhost:3000";

@@ -6,14 +6,14 @@ POST http://localhost:5000/api/v1/auth/register
 content-type: application/json
 
 {
- "username": "test1",
- "email": "test1@yopmail.com",
+ "username": "test2",
+ "email": "alt.ek-29mxstu@yopmail.com",
  "adress": "test",
  "passwd": "admin123"
 }
 
 ### verify user
-POST http://localhost:5000/api/v1/auth/verify/-m3786uom-0q811m
+POST http://localhost:5000/api/v1/auth/verify/-m38hzdhh-n6oowi
 content-type: application/json
 
 {}

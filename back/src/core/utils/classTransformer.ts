@@ -21,13 +21,10 @@ export function buildUserEntityFromModel(userModel: UserModel): User {
 }
 
 export const buildUserModelFromCreateUserDto = async (
-  createUserDto: CreateUserDto
+  createUserDto: CreateUserDto,
+  validationToken: string
 ): Promise<UserModel> => {
   const { hash, salt } = await hashPassword(createUserDto.passwd);
-  const validationToken = uuid();
-
-  console.log({ validationToken });
-
   return {
     id: uuid("user"),
     username: createUserDto.username,

@@ -1,4 +1,5 @@
 import { UserUniqKeys } from "../../core/enum/User";
+import { uuid } from "../../core/utils/uuid";
 import { User } from "../../domain/entities/User";
 import { CreateUserDto } from "../dtos/createUserDto";
 import { AuthService } from "./authService";
@@ -12,10 +13,17 @@ export class AuthConcreteService implements AuthService {
   ) {}
 
   async register(createUserDto: CreateUserDto): Promise<User> {
+    const validationToken = uuid();
     try {
-      const newUser = await this.userService.create(createUserDto);
+      const newUser = await this.userService.create(
+        createUserDto,
+        validationToken
+      );
       if (newUser) {
-        //await this.emailService.sendConfirmationEmail(createUserDto);
+        await this.emailService.sendConfirmationEmail(
+          createUserDto,
+          validationToken
+        );
       }
       return newUser;
     } catch (error) {
@@ -24,14 +32,13 @@ export class AuthConcreteService implements AuthService {
     }
   }
 
-  async verify(token: string): Promise<string> {
+  async verify(token: string): Promise<void> {
     const userByToken = await this.userService.findUserByUniqKey(
       UserUniqKeys.VALIDATION_TOKEN,
       token
     );
     if (userByToken) {
-      const activatedUser = this.userService.activateAccount(userByToken.id);
-      return 'OK';
+      return this.userService.activateAccount(userByToken.id);
     }
 
     throw new Error("Error: Invalid token");
