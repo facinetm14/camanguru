@@ -1,6 +1,6 @@
 import { buildSchema } from "./dbSchema";
 
 export const initDb = async () => {
-  console.log("**Init db**");
+  console.log("** Initializing Database **");
   await buildSchema();
 };

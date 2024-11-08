@@ -1,12 +1,34 @@
-import bcrypt from "bcrypt";
+import crypto from "crypto";
 
-export const hashPassword = async (paswd: string) => {
-  const saltRound = 10;
-  return bcrypt.hash(paswd, saltRound);
+const NB_ITERATION = 1000;
+const SIXTY_FOUR_BITS = 64;
+const SHA_512 = "sha512";
+const HEX_DECIMAL = "hex";
+
+const generateRandomSalt = (): string => {
+  return crypto.randomBytes(16).toString(HEX_DECIMAL);
 };
 
-export const compareHash = async (passwd: string, hashPasswd: string) => {
-  return bcrypt.compare(passwd, hashPasswd);
+export const hashPassword = (
+  passwd: string
+): { salt: string; hash: string } => {
+  const salt = generateRandomSalt();
+  const hash = crypto
+    .pbkdf2Sync(passwd, salt, 1000, 64, SHA_512)
+    .toString(HEX_DECIMAL);
+  return { salt, hash };
+};
+
+export const verifyPassword = async (
+  passwd: string,
+  hashPasswd: string,
+  salt: string
+) => {
+  const hash = crypto
+    .pbkdf2Sync(passwd, salt, NB_ITERATION, SIXTY_FOUR_BITS, SHA_512)
+    .toString(HEX_DECIMAL);
+
+  return hashPasswd === hash;
 };
 
 export const isPasswordStrong = (passwd: string): boolean => {

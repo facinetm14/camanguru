@@ -36,29 +36,30 @@ async function handleSignUpFormSubmit(event) {
   const passwdConfirmation = passwdConfirmationInput.value;
   const passwd = passwdInput.value;
 
-  // if (!username) {
-  //   return;
-  // }
+  if (!username) {
+    return;
+  }
 
-  // if (!adress) {
-  //   return;
-  // }
+  if (!adress) {
+    return;
+  }
 
-  // if (!email || !isValidEmail(email)) {
-  //   return;
-  // }
+  if (!email || !isValidEmail(email)) {
+    return;
+  }
 
-  // if (!passwd || !isPasswordStrong(passwd)) {
-  //   return;
-  // }
+  if (!passwd || !isPasswordStrong(passwd)) {
+    console.log("empty passwd");
+    return;
+  }
 
-  // if (!passwdConfirmation || isMatchedPassword(passwdConfirmation)) {
-  //   return;
-  // }
+  if (!passwdConfirmation || !isMatchedPassword(passwdConfirmation)) {
+    return;
+  }
 
-  // if (!agreement) {
-  //   return;
-  // }
+  if (!agreement) {
+    return;
+  }
 
   const user = {
     email,

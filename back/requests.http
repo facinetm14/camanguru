@@ -1,16 +1,23 @@
 ### get user by id
-GET http://localhost:5000/api/v1/users
+GET http://localhost:5000/api/v1/users/id
 
-### create a user
-POST http://localhost:5000/api/v1/users
+### register a user
+POST http://localhost:5000/api/v1/auth/register
 content-type: application/json
 
 {
- "username": "toto2",
- "email": "test2@gmail.com",
+ "username": "test2",
+ "email": "alt.ek-29mxstu@yopmail.com",
  "adress": "test",
  "passwd": "admin123"
 }
+
+### verify user
+POST http://localhost:5000/api/v1/auth/verify/-m38hzdhh-n6oowi
+content-type: application/json
+
+{}
+
 
 ### get all users
 GET http://localhost:5000/api/v1/users

@@ -7,17 +7,21 @@ export abstract class RouterStrategy {
     resp: ServerResponse
   ): Promise<void>;
 
-  protected matchRoutePatterns(pathname: string, pattern: string): {} | null {
+  protected matchRoutePatterns(
+    pathname: string,
+    pattern: string
+  ): Map<string, string> | null {
     const paramsName: string[] = [];
 
-    const regexPattern = API_BASE + pattern
-      .replace(/\/:([^\/]+)/g, (_, paramName: string) => {
-        paramsName.push(paramName);
-        return "/([^/]+)";
-      })
-      .replace(/\//g, "\\/");
+    const regexPattern =
+      API_BASE +
+      pattern
+        .replace(/\/:([^\/]+)/g, (_, paramName: string) => {
+          paramsName.push(paramName);
+          return "/([^/]+)";
+        })
+        .replace(/\//g, "\\/");
 
-    console.log({ regexPattern });
     const regex = new RegExp(`^${regexPattern}$`);
 
     const match = pathname.match(regex);
@@ -25,10 +29,10 @@ export abstract class RouterStrategy {
       return null;
     }
 
-    const params: { [key: string]: string } = {};
+    const params = new Map<string, string>();
 
     paramsName.forEach((param, index) => {
-      params[param] = match[index + 1];
+      params.set(param, match[index + 1]);
     });
 
     return params;

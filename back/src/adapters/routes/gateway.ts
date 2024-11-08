@@ -19,6 +19,11 @@ export class Gateway {
       AllowedRoutes.BASE,
       factoryModule(ModuleRegister.BASE_ROUTE)
     );
+
+    this.registry.set(
+      AllowedRoutes.AUTH,
+      factoryModule(ModuleRegister.AUTH_ROUTE)
+    );
   }
   async dispatch(req: IncomingMessage, resp: ServerResponse): Promise<void> {
     if (!req.url?.match(/^\/api\/v1\//)) {
@@ -26,8 +31,7 @@ export class Gateway {
       return;
     }
 
-    const baseRoute = req.url?.slice(API_BASE.length) ?? "";
-    console.log({ baseRoute });
+    const baseRoute = req.url?.slice(API_BASE.length)?.split("/")[1] ?? "";
     try {
       this.sanitizeUrl(baseRoute);
       return this.resolveRoute(

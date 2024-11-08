@@ -1,3 +1,4 @@
+import { UserUniqKeys } from "../../core/enum/User";
 import {
   buildUserEntityFromModel,
   buildUserListFromRawModel,
@@ -20,8 +21,8 @@ export class UserConCreteService implements UserService {
     return buildUserListFromRawModel(userRawList);
   }
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const newUser = await buildUserModelFromCreateUserDto(createUserDto);
+  async create(createUserDto: CreateUserDto, validationToken: string): Promise<User> {
+    const newUser = await buildUserModelFromCreateUserDto(createUserDto, validationToken);
     try {
       const createdUser = await this.userRepository.create(newUser);
       return buildUserEntityFromModel(createdUser);
@@ -29,5 +30,20 @@ export class UserConCreteService implements UserService {
       console.log(error);
       throw new Error("Error: failled to create a user");
     }
+  }
+
+  async findUserByUniqKey(
+    key: UserUniqKeys,
+    value: string
+  ): Promise<User | null> {
+    const user = await this.userRepository.findUserByUniqKey(key, value);
+    if (!user) {
+      return null;
+    }
+    return buildUserEntityFromModel(user);
+  }
+
+  async activateAccount(idUser: string): Promise<void> {
+    return this.userRepository.updateStatusAndRemoveValidationToken(idUser);
   }
 }

@@ -1,20 +1,26 @@
 import { IncomingMessage, ServerResponse } from "http";
-import { RouterStrategy } from "./routerStrategy";
-import { UserController } from "../../adapters/controllers/UserController";
-import { IRouter } from "./IRouter";
-import { ResponseStatusCode } from "../../core/enum/ResponseStatusCode";
 import { routeType } from "../../core/types/router";
+import { BaseRouter } from "./baseRouter";
+import { IRouter } from "./IRouter";
+import { AuthController } from "../controllers/AuthController";
+import { RouterStrategy } from "./routerStrategy";
+import { ResponseStatusCode } from "../../core/enum/ResponseStatusCode";
 
-export class UserRouter extends RouterStrategy implements IRouter {
+export class AuthRouter extends RouterStrategy implements IRouter {
   private routes: routeType[];
 
-  constructor(private userController: UserController) {
+  constructor(private authController: AuthController) {
     super();
     this.routes = [
       {
-        pattern: "/users",
-        method: "GET",
-        handler: this.userController.findAll,
+        pattern: "/auth/register",
+        method: "POST",
+        handler: this.authController.register,
+      },
+      {
+        pattern: "/auth/verify/:token",
+        method: "POST",
+        handler: this.authController.verify,
       },
     ];
   }
@@ -36,7 +42,7 @@ export class UserRouter extends RouterStrategy implements IRouter {
 
       if (params && route.method === req.method) {
         matchedMethod = true;
-        route.handler.call(this.userController, { req, resp, params });
+        route.handler.call(this.authController, { req, resp, params });
       }
     }
 

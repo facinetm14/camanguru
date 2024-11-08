@@ -8,21 +8,21 @@ describe("Input validation test", () => {
     });
 
     it("An email local part is followed by @ //totodd", () => {
-        expect(isValidEmail("totodd")).toBe(false);
+      expect(isValidEmail("totodd")).toBe(false);
     });
 
     it("The sub-adress is followed by . //test@42", () => {
-        expect(isValidEmail('test@42')).toBe(false);
+      expect(isValidEmail("test@42")).toBe(false);
     });
-    
+
     it("This email is valid, should return true //test@42.fr", () => {
-        expect(isValidEmail("test@42.fr"));
-    })
+      expect(isValidEmail("test@42.fr"));
+    });
   });
 
   describe("Password complexity rules", () => {
     it("A passwd lenght is min 12 and 20 chars // admin1234", () => {
-        expect(isPasswordStrong("admin1234")).toBe(false);
+      expect(isPasswordStrong("admin1234")).toBe(false);
     });
 
     it("A password should contains one or more capital // adminsdddddd", () => {
@@ -46,7 +46,6 @@ describe("Input validation test", () => {
     const passwd = "hello";
 
     const hashed = await hashPassword(passwd);
-    console.log({hashed});
     expect(hashed).toBeTruthy();
     expect(hashed).not.toEqual(passwd);
   });

@@ -1,6 +1,7 @@
 import { CreateUserDto } from "../../application/dtos/createUserDto";
 import { User } from "../../domain/entities/User";
 import { UserModel } from "../../domain/models/UserModel";
+import { UserStatus } from "../enum/User";
 import { hashPassword } from "./password";
 import { uuid } from "./uuid";
 
@@ -20,17 +21,19 @@ export function buildUserEntityFromModel(userModel: UserModel): User {
 }
 
 export const buildUserModelFromCreateUserDto = async (
-  createUserDto: CreateUserDto
+  createUserDto: CreateUserDto,
+  validationToken: string
 ): Promise<UserModel> => {
-  /**TODO Should hash passwd !!!!!!!!!!!!!!! */
-  //const passwd = await hashPassword(createUserDto.passwd);
-  const passwd = "blabla123";
+  const { hash, salt } = await hashPassword(createUserDto.passwd);
   return {
     id: uuid("user"),
     username: createUserDto.username,
     email: createUserDto.email,
     adress: createUserDto.adress,
-    passwd,
+    passwd: hash,
+    salt,
+    status: UserStatus.UNVERIFIED,
+    validation_token: validationToken,
     created_at: new Date(),
     updated_at: new Date(),
   };
