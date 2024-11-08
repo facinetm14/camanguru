@@ -17,6 +17,9 @@ export function buildUserEntityFromModel(userModel: UserModel): User {
     createdAt: userModel.created_at,
     email: userModel.email,
     adress: userModel.adress,
+    passwd: userModel.passwd,
+    salt: userModel.salt,
+    status: userModel.status,
   };
 }
 

@@ -12,6 +12,7 @@ import { EmailConcreteService } from "./src/application/services/emailConcreteSe
 import { AuthConcreteService } from "./src/application/services/authConcreteService";
 import { AuthController } from "./src/adapters/controllers/AuthController";
 import { AuthRouter } from "./src/adapters/routes/authRouter";
+import { SessionConcreteService } from "./src/application/services/sessionConcreteService";
 
 const hostname = process.env.HOST || "0.0.0.0";
 const port = process.env.PORT || 5000;
@@ -53,8 +54,16 @@ const server = createServer((req: IncomingMessage, resp: ServerResponse) => {
   );
 
   DIContainer.registerClass(
+    ModuleRegister.SESSION_SERVICE,
+    new SessionConcreteService()
+  );
+
+  DIContainer.registerClass(
     ModuleRegister.AUTH_CONTROLLER,
-    new AuthController(DIContainer.resolve(ModuleRegister.AUTH_SERVICE))
+    new AuthController(
+      DIContainer.resolve(ModuleRegister.AUTH_SERVICE),
+      DIContainer.resolve(ModuleRegister.SESSION_SERVICE)
+    )
   );
 
   DIContainer.registerClass(

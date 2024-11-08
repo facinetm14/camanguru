@@ -19,8 +19,8 @@ const verify = async (token) => {
   });
 };
 
-<<<<<<< HEAD
-const login = async (username, passwd) => {
+
+const signIn = async (username, passwd) => {
   return fetch(`${API_BASE_ROUTE}/auth/login`, {
     headers: {
       "Content-Type": "application/json",
@@ -30,9 +30,12 @@ const login = async (username, passwd) => {
   });
 }
 
-=======
->>>>>>> bd3ae3c (13 user authentication (#14))
+
+const getUserInfos = async (userId) => {};
+
 export const userService = {
   register,
-  verify
+  verify,
+  signIn,
+  getUserInfos
 };
