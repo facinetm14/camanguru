@@ -58,24 +58,4 @@ export class AuthController {
     }
     resp.end();
   }
-
-  async signin({ req, resp }: ControllerInputType): Promise<void> {
-    let body = "";
-    let createUserDto: UserLoginDto
-
-    req?.on("data", (chunk) => {
-      body += chunk.toString();
-    });
-
-    req?.on("end", () => {
-      (async () => {
-        try {
-          createUserDto = JSON.parse(body);
-          
-        } catch (error) {
-          
-        }
-      })();
-    });
-  }
 }
