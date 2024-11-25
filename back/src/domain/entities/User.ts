@@ -9,3 +9,5 @@ export type User = {
   salt: string;
   status: string;
 };
+
+export type UserWithNoPassword = Omit<User, 'passwd'>;

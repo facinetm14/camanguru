@@ -52,7 +52,7 @@ export class AuthController {
       resp.end();
       return;
     }
-    const token = params.get("token")!;
+    const token = params.get("token") as string;
 
     try {
       await this.authService.verify(token);
@@ -78,19 +78,20 @@ export class AuthController {
         const userId = await this.authService.signin(loginUserDto);
         if (!userId) {
           resp.statusCode = ResponseStatusCode.INVALID_CREDENTIALS;
-          resp.end();
+          resp.end("invalid credentials");
           return;
         }
 
         const authToken = uuid("session");
 
-        this.sessionService.register({ id: authToken, userId });
+        await this.sessionService.register({ id: authToken, userId });
 
-        resp.setHeader(
-          "Set-Cookie",
-          `token=${authToken}; HttpOnly; Secure; SameSite=Strict`
-        );
+        // resp.setHeader(
+        //   "Set-Cookie",
+        //   `token=${authToken}; HttpOnly; SameSite=Strict;`
+        // );
 
+        resp.statusCode = ResponseStatusCode.GET_OK;
         resp.end(JSON.stringify({ userId }));
       })();
     });

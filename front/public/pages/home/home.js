@@ -9,14 +9,10 @@ import { userService } from "../../usecases/userService.js";
     localStorage.clear("validationToken");
     return loadComponent("login", Components.LOGIN_FORM, "#home-container");
   }
-<<<<<<< HEAD
-  
+
   if (location.href.endsWith("/register")) {
     loadComponent("signup", Components.SIGN_UP, "#home-container");
   } else {
     loadComponent("login", Components.LOGIN_FORM, "#home-container");
   }
-=======
-  loadComponent("login", Components.LOGIN_FORM, "#home-container");
->>>>>>> ccdc7a8 (WIP)
 })();

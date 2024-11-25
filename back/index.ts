@@ -13,6 +13,7 @@ import { AuthConcreteService } from "./src/application/services/authConcreteServ
 import { AuthController } from "./src/adapters/controllers/AuthController";
 import { AuthRouter } from "./src/adapters/routes/authRouter";
 import { SessionConcreteService } from "./src/application/services/sessionConcreteService";
+import { SessionConcreteRepository } from "./src/infrastructure/database/repositories/sessionConcreteRepository";
 
 const hostname = process.env.HOST || "0.0.0.0";
 const port = process.env.PORT || 5000;
@@ -54,8 +55,14 @@ const server = createServer((req: IncomingMessage, resp: ServerResponse) => {
   );
 
   DIContainer.registerClass(
+    ModuleRegister.SESSION_REPOSITORY,
+    new SessionConcreteRepository()
+  );
+  DIContainer.registerClass(
     ModuleRegister.SESSION_SERVICE,
-    new SessionConcreteService()
+    new SessionConcreteService(
+      DIContainer.resolve(ModuleRegister.SESSION_REPOSITORY)
+    )
   );
 
   DIContainer.registerClass(

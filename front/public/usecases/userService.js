@@ -19,28 +19,32 @@ const verify = async (token) => {
   });
 };
 
-
 const signIn = async (username, passwd) => {
   return fetch(`${API_BASE_ROUTE}/auth/login`, {
     headers: {
       "Content-Type": "application/json",
     },
     method: "POST",
-    body: JSON.stringify({username, passwd}),
+    body: JSON.stringify({ username, passwd }),
   });
-}
+};
 
+const isAuth = async () => {};
 
-const isAuth = async () => {
-
-}
-
-const getUserInfos = async (userId) => {};
+const getUserInfos = async (userId) => {
+  return fetch(`${API_BASE_ROUTE}/users/${userId}`, {
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  });
+};
 
 export const userService = {
   register,
   verify,
   signIn,
   getUserInfos,
-  isAuth
+  isAuth,
 };
