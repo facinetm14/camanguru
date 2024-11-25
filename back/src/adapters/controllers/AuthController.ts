@@ -1,4 +1,5 @@
 import { CreateUserDto } from "../../application/dtos/createUserDto";
+import { UserLoginDto } from "../../application/dtos/userLoginDto";
 import { AuthService } from "../../application/services/authService";
 import { ResponseStatusCode } from "../../core/enum/ResponseStatusCode";
 import { ControllerInputType } from "../../core/types/controllerInputType";
@@ -56,5 +57,25 @@ export class AuthController {
       resp.statusCode = ResponseStatusCode.BAD_REQUEST;
     }
     resp.end();
+  }
+
+  async signin({ req, resp }: ControllerInputType): Promise<void> {
+    let body = "";
+    let createUserDto: UserLoginDto
+
+    req?.on("data", (chunk) => {
+      body += chunk.toString();
+    });
+
+    req?.on("end", () => {
+      (async () => {
+        try {
+          createUserDto = JSON.parse(body);
+          
+        } catch (error) {
+          
+        }
+      })();
+    });
   }
 }

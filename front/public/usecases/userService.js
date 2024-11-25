@@ -19,6 +19,16 @@ const verify = async (token) => {
   });
 };
 
+const login = async (username, passwd) => {
+  return fetch(`${API_BASE_ROUTE}/auth/login`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify({username, passwd}),
+  });
+}
+
 export const userService = {
   register,
   verify

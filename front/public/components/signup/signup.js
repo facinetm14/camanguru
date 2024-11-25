@@ -28,7 +28,7 @@ function isMatchedPassword(passwdConfirmation) {
   return passwdInput.value === passwdConfirmation;
 }
 
-async function handleSignUpFormSubmit(event) {
+async function handleSignUpFormSubmit(_event) {
   const username = usernameInput.value;
   const adress = adressInput.value;
   const email = emailInput.value;
