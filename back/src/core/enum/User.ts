@@ -3,9 +3,14 @@ export enum UserStatus {
   VERIFIED = "verified",
 }
 
+export enum UserSessionStatus {
+  VALID = "valid",
+  INVALID = "invalid",
+}
+
 export enum UserUniqKeys {
   VALIDATION_TOKEN = "validation_token",
   ID = "id",
   EMAIL = "email",
-  USER_NAME = "user_name",
+  USER_NAME = "username",
 }

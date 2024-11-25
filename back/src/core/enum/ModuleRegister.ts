@@ -11,4 +11,7 @@ export enum ModuleRegister {
   AUTH_SERVICE = "authService",
   AUTH_CONTROLLER = "authController",
   AUTH_ROUTE = "authRoute",
+
+  SESSION_REPOSITORY = "sessionRepository",
+  SESSION_SERVICE = "sessionService",
 }

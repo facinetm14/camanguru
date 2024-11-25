@@ -1,5 +1,7 @@
+import { CreateSessionDto } from "../../application/dtos/createSessionDto";
 import { CreateUserDto } from "../../application/dtos/createUserDto";
 import { User } from "../../domain/entities/User";
+import { SessionModel } from "../../domain/models/SessionModel";
 import { UserModel } from "../../domain/models/UserModel";
 import { UserStatus } from "../enum/User";
 import { hashPassword } from "./password";
@@ -17,6 +19,9 @@ export function buildUserEntityFromModel(userModel: UserModel): User {
     createdAt: userModel.created_at,
     email: userModel.email,
     adress: userModel.adress,
+    passwd: userModel.passwd,
+    salt: userModel.salt,
+    status: userModel.status,
   };
 }
 
@@ -34,6 +39,17 @@ export const buildUserModelFromCreateUserDto = async (
     salt,
     status: UserStatus.UNVERIFIED,
     validation_token: validationToken,
+    created_at: new Date(),
+    updated_at: new Date(),
+  };
+};
+
+export const buildSessionModelFromCreateSessionDto = (
+  createSessionDto: CreateSessionDto
+): SessionModel => {
+  return {
+    id: createSessionDto.id,
+    user_id: createSessionDto.userId,
     created_at: new Date(),
     updated_at: new Date(),
   };

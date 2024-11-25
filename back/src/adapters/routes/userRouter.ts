@@ -16,6 +16,11 @@ export class UserRouter extends RouterStrategy implements IRouter {
         method: "GET",
         handler: this.userController.findAll,
       },
+      {
+        pattern: "/users/:userId",
+        method: "GET",
+        handler: this.userController.findById,
+      }
     ];
   }
 
