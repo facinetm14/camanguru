@@ -21,12 +21,14 @@ export class AuthConcreteService implements AuthService {
         createUserDto,
         validationToken
       );
+
       if (newUser) {
         await this.emailService.sendConfirmationEmail(
           createUserDto,
           validationToken
         );
       }
+
       return newUser;
     } catch (error) {
       console.log(error);
@@ -61,7 +63,7 @@ export class AuthConcreteService implements AuthService {
       user.passwd,
       user.salt
     );
-    
+
     if (!checkPassword) {
       return null;
     }

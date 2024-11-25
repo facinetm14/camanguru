@@ -5,7 +5,17 @@ const passwdInput = document.querySelector("#password-from-login");
 const loginBtn = document.querySelector("#login-btn");
 
 
+<<<<<<< HEAD
 loginBtn.addEventListener('click', handleLoginFormSubmit);
+=======
+  if (username && passwd) {
+    const user = await userService.signIn(username, passwd);
+    if (user) {
+      window.location.href = "/profile";
+    }
+  }
+};
+>>>>>>> ccdc7a8 (WIP)
 
 async function handleLoginFormSubmit(_event) {
     const username = userNameInput.value;

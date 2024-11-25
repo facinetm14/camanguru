@@ -34,7 +34,9 @@ export class AuthController {
           if (!newUser) {
             resp.statusCode = ResponseStatusCode.SERVER_INTERNAL_ERROR;
             resp.end();
+            return;
           }
+          resp.statusCode = ResponseStatusCode.CREATED_OK;
         } catch (error) {
           resp.statusCode = ResponseStatusCode.BAD_REQUEST;
           resp.end();

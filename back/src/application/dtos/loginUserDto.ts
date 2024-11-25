@@ -1,4 +1,3 @@
-export type LoginUserDto = {
-  username: string;
-  passwd: string;
-};
+import { CreateUserDto } from "./createUserDto";
+
+export type LoginUserDto = Pick<CreateUserDto, "username" | "passwd">;

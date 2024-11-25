@@ -31,11 +31,16 @@ const signIn = async (username, passwd) => {
 }
 
 
+const isAuth = async () => {
+
+}
+
 const getUserInfos = async (userId) => {};
 
 export const userService = {
   register,
   verify,
   signIn,
-  getUserInfos
+  getUserInfos,
+  isAuth
 };
