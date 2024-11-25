@@ -12,13 +12,23 @@ import userStore from "../../scripts/userStore.js";
   }
   const user = userStore.getState().user;
 
-  const usernameLabel = document.querySelector(".username-label");
-  usernameLabel.textContent = user.username;
-
   const profileDropdownMenu = document.querySelector("#profile-dropdownMenu");
-
+  const usernameLabel = document.querySelector("#username-label");
+  usernameLabel.textContent = user.username;
   usernameLabel.addEventListener("click", (_event) => {
     const previous = profileDropdownMenu.style.display;
     profileDropdownMenu.style.display = previous === "block" ? "none" : "block";
   });
+
+
+  const profileNameLabel = document.querySelector("#profile-name-label");
+  profileNameLabel.textContent = user.username;
+
+  const profileEmailLabel = document.querySelector("#profile-email-label");
+  profileEmailLabel.textContent = user.email;
+
+  const profileAdressLabel = document.querySelector("#profile-adress-label");
+  profileAdressLabel.textContent = user.adress;
+
+
 })();
