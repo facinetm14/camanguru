@@ -25,8 +25,13 @@ export class AuthRouter extends RouterStrategy implements IRouter {
       {
         pattern: "/auth/login",
         method: "POST",
+<<<<<<< HEAD
         handler: this.authController.login,
       },
+=======
+        handler: this.authController.signin,
+      }
+>>>>>>> a602380 (WIP)
     ];
   }
 
