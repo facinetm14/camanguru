@@ -1,7 +1,7 @@
 <div>
   <nav class="navbar navbar-light profile-topBar">
     <a class="navbar-brand" href="/">
-      <img src="../../images/logo.jpeg" width="60" height="60" alt="">
+      <img src="../../images/logo.png" width="60" height="60" alt="">
     </a>
     <div class="navbar-text">
       <div class="username-label" id="username-label"></div>
@@ -54,7 +54,7 @@
       </div>
       <div class="card-deck" id="my-galery">
         <div class="card" style="width: 15rem;">
-          <img class="card-img-top" src="../../images/test.jpeg" alt="Card image cap">
+          <img class="card-img-top" src="../../images/nice-cat.png" alt="Card image cap">
           <div class="card-body">
             <h5 class="card-title">Card title</h5>
           </div>
@@ -79,10 +79,11 @@
       </div>
     </div>
   </div>
-  <div class="block-selfie" id="block-selfie">
+  <div class="block-selfie hidden" id="block-selfie">
     <video id="video" width="650" height="480" autoplay playsinline></video>
+    <canvas id="canvas" class="hidden" width="650" height="480"></canvas>
     <div class="selfie-action-wrapper">
-      <button type="button" class="selfie-action-btn">
+      <button type="button" class="selfie-action-btn" id="take-photo">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera"
           viewBox="0 0 16 16">
           <path
@@ -91,7 +92,7 @@
             d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5m0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0" />
         </svg>
       </button>
-      <button type="button" class="selfie-action-btn">
+      <button type="button" class="selfie-action-btn" id="close-photo">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle"
           viewBox="0 0 16 16">
           <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
@@ -100,7 +101,6 @@
         </svg>
       </button>
     </div>
-    <canvas id="canvas" width="650" height="480"></canvas>
   </div>
 </div>
 
@@ -192,9 +192,8 @@
   }
 
   .block-selfie {
-    border: 1px solid gray;
     position: absolute;
-    display: none;
+    border: 1px solid gray;
     top: 10%;
     right: 0;
     left: 0;
@@ -207,6 +206,10 @@
     display: block;
     margin: auto;
     height: auto;
+  }
+
+  .hidden {
+    display: none;
   }
 
   .selfie-action-btn {
