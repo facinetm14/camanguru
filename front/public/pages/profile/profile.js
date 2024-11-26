@@ -20,7 +20,6 @@ import userStore from "../../scripts/userStore.js";
     profileDropdownMenu.style.display = previous === "block" ? "none" : "block";
   });
 
-
   const profileNameLabel = document.querySelector("#profile-name-label");
   profileNameLabel.textContent = user.username;
 
@@ -30,5 +29,25 @@ import userStore from "../../scripts/userStore.js";
   const profileAdressLabel = document.querySelector("#profile-adress-label");
   profileAdressLabel.textContent = user.adress;
 
+  // selfie
+  const addImageBtn = document.querySelector("#btn-add-image");
+  const selfieBlock = document.querySelector("#block-selfie");
+  const screenZone = document.querySelector("#canvas");
+  const video = document.querySelector("#video");
+  const context = canvas.getContext("2d");
+  let stream;
 
+  addImageBtn.addEventListener("click", showSelfieBlock);
+
+  async function showSelfieBlock(_event) {
+    selfieBlock.style.display = "block";
+
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      video.srcObject = stream;
+      captureSelfieButton.disabled = false;
+    } catch (error) {
+      console.error("Error accessing the camera:", error);
+    }
+  }
 })();
