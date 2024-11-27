@@ -1,11 +1,14 @@
 import { UserUniqKeys } from "../../../domain/enums/user.enums";
+import { SessionService } from "../../../domain/usecases/sessionService";
 import { UserService } from "../../../domain/usecases/userService";
 import { ResponseStatusCode } from "../../enums/ResponseStatusCode";
 import { ControllerInputType } from "../types/controllerInputType";
 
-
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private sessionService: SessionService
+  ) {}
 
   async findAll({ resp }: ControllerInputType): Promise<void> {
     resp.statusCode = ResponseStatusCode.GET_OK;
@@ -17,16 +20,24 @@ export class UserController {
   }
 
   async findById({ req, params, resp }: ControllerInputType): Promise<void> {
-    
-    if (!params?.has("userId")) {
+    if (!params?.has("sessionId")) {
       resp.statusCode = ResponseStatusCode.BAD_REQUEST;
       resp.end();
       return;
     }
 
-    const userId = params.get("userId") as string;
+    const sessionId = params.get("sessionId") as string;
 
     try {
+      const userId = await this.sessionService.findUserIdFromSession(sessionId);
+
+      console.log({ userId, sessionId });
+
+      if (!userId) {
+        (resp.statusCode = ResponseStatusCode.FORBIDDEN), resp.end();
+        return;
+      }
+
       const user = await this.userService.findUserByUniqKey(
         UserUniqKeys.ID,
         userId

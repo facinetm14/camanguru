@@ -15,4 +15,16 @@ export class SessionConcreteService implements SessionService {
       throw new Error("Error: failed to create user session");
     }
   }
+
+  async findUserIdFromSession(id: string): Promise<string | null> {
+    const session = await this.sessionRepository.findById(id);
+    if (!session) {
+      return null;
+    }
+    return session.user_id;
+  }
+
+  async delete(id: string): Promise<void> {
+    return this.sessionRepository.delete(id);
+  }
 }

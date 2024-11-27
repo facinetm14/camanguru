@@ -5,6 +5,8 @@ import {
 } from "../../scripts/utils.js";
 import { userService } from "../../usecases/userService.js";
 
+const firstNameInput = document.querySelector("#first-name");
+const lastNameInput = document.querySelector("#last-name");
 const usernameInput = document.querySelector("#username");
 const adressInput = document.querySelector("#adress");
 const emailInput = document.querySelector("#email");
@@ -35,6 +37,16 @@ async function handleSignUpFormSubmit(_event) {
   const agreement = agreementCheckbox.value === "on";
   const passwdConfirmation = passwdConfirmationInput.value;
   const passwd = passwdInput.value;
+  const firstName = firstNameInput.value;
+  const lastName = lastNameInput.value;
+
+  if (!firstName) {
+    return ;
+  }
+
+  if (!lastName) {
+    return ;
+  }
 
   if (!username) {
     return;
@@ -49,7 +61,6 @@ async function handleSignUpFormSubmit(_event) {
   }
 
   if (!passwd || !isPasswordStrong(passwd)) {
-    console.log("empty passwd");
     return;
   }
 
@@ -66,6 +77,8 @@ async function handleSignUpFormSubmit(_event) {
     adress,
     passwd,
     username,
+    firstName,
+    lastName
   };
 
   const registerUser = await userService.register(user);

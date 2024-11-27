@@ -1,7 +1,7 @@
+import { text } from "stream/consumers";
 import { pgClient } from "../../database/dataSource";
 import { SessionRepository } from "../../domain/ports/sessionRepository";
 import { SessionModel } from "../model/SessionModel";
-
 
 export class SessionConcreteRepository implements SessionRepository {
   async register(session: SessionModel): Promise<any> {
@@ -23,12 +23,26 @@ export class SessionConcreteRepository implements SessionRepository {
 
   async findById(id: string): Promise<SessionModel> {
     const queryUser = {
-      text: `SELECT * FROM users WHERE id = $1 LIMIT 1`,
+      text: `SELECT * FROM users_sessions WHERE id = $1 LIMIT 1`,
       values: [id],
     };
 
     const connexion = await pgClient.connect();
     const result = await pgClient.query(queryUser);
+    connexion.release();
+    const session = result["rows"][0];
+
+    return session;
+  }
+
+  async delete(id: string): Promise<void> {
+    const deleteQuery = {
+      text: `DELETE FROM users_sessions WHERE id = $1`,
+      values: [id],
+    };
+
+    const connexion = await pgClient.connect();
+    const result = await pgClient.query(deleteQuery);
     connexion.release();
     const session = result["rows"][0];
 

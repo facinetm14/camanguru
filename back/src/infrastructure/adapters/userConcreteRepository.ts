@@ -3,12 +3,13 @@ import { UserUniqKeys, UserStatus } from "../../domain/enums/user.enums";
 import { UserRepository } from "../../domain/ports/userRepository";
 import { UserModel } from "../model/UserModel";
 
-
 export class UserConcreteRepository implements UserRepository {
   async create(user: UserModel): Promise<any> {
     const {
       id,
       username,
+      first_name,
+      last_name,
       email,
       adress,
       passwd,
@@ -21,8 +22,8 @@ export class UserConcreteRepository implements UserRepository {
 
     const insertQuery = {
       text: `
-        INSERT INTO users(id, username, email, adress, passwd, created_at, updated_at, salt, status, validation_token)
-        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`,
+        INSERT INTO users(id, username, email, adress, passwd, created_at, updated_at, salt, status, validation_token, first_name, last_name)
+        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);`,
       values: [
         id,
         username,
@@ -34,6 +35,8 @@ export class UserConcreteRepository implements UserRepository {
         salt,
         status,
         validation_token,
+        first_name,
+        last_name,
       ],
     };
 

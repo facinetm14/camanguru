@@ -70,4 +70,5 @@ export class AuthConcreteService implements AuthService {
 
     return user.id;
   }
+
 }
