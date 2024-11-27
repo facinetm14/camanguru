@@ -2,8 +2,11 @@ import { CreateUserDto } from "../../../domain/dtos/createUserDto";
 import { UserLoginDto } from "../../../domain/dtos/userLoginDto";
 import { AuthService } from "../../../domain/usecases/authService";
 import { SessionService } from "../../../domain/usecases/sessionService";
+import {
+  parseRequestBodyAndBuildCreateUserDto,
+  parseRequestBodyAndBuildLoginUserDto,
+} from "../../../domain/utils/mappers/user-entity.mapper";
 import { uuid } from "../../../domain/utils/uuid";
-import { isValidEmail } from "../../../domain/utils/validation/email";
 import { ResponseStatusCode } from "../../enums/ResponseStatusCode";
 import { ControllerInputType } from "../types/controllerInputType";
 
@@ -15,7 +18,6 @@ export class AuthController {
 
   async register({ req, resp }: ControllerInputType): Promise<void> {
     let body = "";
-    let createUserDto: CreateUserDto;
 
     req?.on("data", (chunk) => {
       body += chunk.toString();
@@ -24,18 +26,24 @@ export class AuthController {
     req?.on("end", () => {
       (async () => {
         try {
-          createUserDto = JSON.parse(body);
-          if (!isValidEmail(createUserDto.email)) {
+          const createUserDto = parseRequestBodyAndBuildCreateUserDto(
+            JSON.parse(body)
+          );
+
+          if (!createUserDto) {
             resp.statusCode = ResponseStatusCode.BAD_REQUEST;
-            resp.end("Invalid user email");
+            resp.end("Invalid request body");
             return;
           }
+
           const newUser = await this.authService.register(createUserDto);
+
           if (!newUser) {
             resp.statusCode = ResponseStatusCode.SERVER_INTERNAL_ERROR;
             resp.end();
             return;
           }
+
           resp.statusCode = ResponseStatusCode.CREATED_OK;
           resp.end();
         } catch (error) {
@@ -53,7 +61,13 @@ export class AuthController {
       resp.end();
       return;
     }
-    const token = params.get("token") as string;
+    const token = params.get("token");
+
+    if (!token || typeof token !== "string") {
+      resp.statusCode = ResponseStatusCode.BAD_REQUEST;
+      resp.end();
+      return;
+    }
 
     try {
       await this.authService.verify(token);
@@ -67,15 +81,22 @@ export class AuthController {
 
   async login({ req, resp }: ControllerInputType): Promise<void> {
     let body = "";
-    let loginUserDto: UserLoginDto;
-
     req?.on("data", (chunk) => {
       body += chunk.toString();
     });
 
     req?.on("end", () => {
       (async () => {
-        loginUserDto = JSON.parse(body);
+        const loginUserDto = parseRequestBodyAndBuildLoginUserDto(
+          JSON.parse(body)
+        );
+
+        if (!loginUserDto) {
+          resp.statusCode = ResponseStatusCode.BAD_REQUEST;
+          resp.end();
+          return;
+        }
+
         const userId = await this.authService.signin(loginUserDto);
         if (!userId) {
           resp.statusCode = ResponseStatusCode.INVALID_CREDENTIALS;
@@ -87,14 +108,27 @@ export class AuthController {
 
         await this.sessionService.register({ id: authToken, userId });
 
-        // resp.setHeader(
-        //   "Set-Cookie",
-        //   `token=${authToken}; HttpOnly; SameSite=Strict;`
-        // );
-
         resp.statusCode = ResponseStatusCode.GET_OK;
-        resp.end(JSON.stringify({ userId }));
+        resp.end(JSON.stringify({ sessionId: authToken }));
       })();
     });
+  }
+
+  async logout({ resp, params }: ControllerInputType) {
+    if (!params?.has("sessionId")) {
+      resp.statusCode = ResponseStatusCode.BAD_REQUEST;
+      resp.end();
+      return;
+    }
+
+    const sessionId = params.get("sessionId") as string;
+
+    try {
+      await this.sessionService.delete(sessionId);
+      resp.statusCode = ResponseStatusCode.GET_OK;
+    } catch (error) {
+      resp.statusCode = ResponseStatusCode.BAD_REQUEST;
+    }
+    resp.end();
   }
 }

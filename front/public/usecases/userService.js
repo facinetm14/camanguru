@@ -31,8 +31,8 @@ const signIn = async (username, passwd) => {
 
 const isAuth = async () => {};
 
-const getUserInfos = async (userId) => {
-  return fetch(`${API_BASE_ROUTE}/users/${userId}`, {
+const getMe = async (sessionId) => {
+  return fetch(`${API_BASE_ROUTE}/users/${sessionId}`, {
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
@@ -41,10 +41,20 @@ const getUserInfos = async (userId) => {
   });
 };
 
+const logout = async (sessionId) => {
+  return fetch(`${API_BASE_ROUTE}/auth/logout/${sessionId}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "PATCH",
+  });
+};
+
 export const userService = {
   register,
   verify,
   signIn,
-  getUserInfos,
+  getMe,
   isAuth,
+  logout,
 };

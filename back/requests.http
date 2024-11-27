@@ -9,7 +9,9 @@ content-type: application/json
  "username": "test2",
  "email": "alt.bm-06xlvwr@yopmail.com",
  "adress": "test",
- "passwd": "admin123"
+ "passwd": "Alt.bm-06xlvwr@yopmail.com",
+ "firstName": "Benois",
+ "lastName": "DUPOND"
 }
 
 ### verify user
@@ -20,4 +22,5 @@ content-type: application/json
 
 
 ### get all users
-GET http://localhost:5000/api/v1/users
+GET http://localhost:5000/api/v1/users/session-m3zyg1kv-nz8d2z
+Content-Type: application/json

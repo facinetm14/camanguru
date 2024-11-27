@@ -4,6 +4,8 @@ const query = `
             id VARCHAR(255) UNIQUE NOT NULL,
             username VARCHAR(50) UNIQUE NOT NULL,
             passwd VARCHAR(255) NOT NULL,
+            first_name VARCHAR(255) NOT NULL,
+            last_name VARCHAR(255) NOT NULL,
             salt VARCHAR(255) NOT NULL,
             email VARCHAR(60) UNIQUE NOT NULL,
             adress VARCHAR(60) NOT NULL,

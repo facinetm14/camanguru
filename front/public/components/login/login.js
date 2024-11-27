@@ -14,8 +14,8 @@ async function handleLoginFormSubmit(_event) {
     const loginUserResp = await userService.signIn(username, passwd);
     if (loginUserResp.ok) {
       const user = await loginUserResp.json();
-      const { userId } = user;
-      sessionStorage.setItem("userId", userId);
+      const { sessionId } = user;
+      sessionStorage.setItem("sessionId", sessionId);
       window.location.href = "/profile";
     }
   }

@@ -1,10 +1,18 @@
 import { userService } from "../../usecases/userService.js";
 import userStore from "../../scripts/userStore.js";
+import { loadPage } from "../../scripts/utils.js";
 
 (async () => {
-  const userId = sessionStorage.getItem("userId");
+  const sessionId = sessionStorage.getItem("sessionId");
+  if (!sessionId) {
+    window.location.href = "/";
+    return; 
+  }
 
-  const userInfosResp = await userService.getUserInfos(userId);
+  const logoutBtn = document.querySelector("#logout");
+  logoutBtn.addEventListener("click", logout);
+
+  const userInfosResp = await userService.getMe(sessionId);
 
   if (userInfosResp.ok) {
     const userInfosRespData = await userInfosResp.json();
@@ -21,7 +29,7 @@ import userStore from "../../scripts/userStore.js";
   });
 
   const profileNameLabel = document.querySelector("#profile-name-label");
-  profileNameLabel.textContent = user.username;
+  profileNameLabel.textContent = `${user.firstName} ${user.lastName}`;
 
   const profileEmailLabel = document.querySelector("#profile-email-label");
   profileEmailLabel.textContent = user.email;
@@ -83,5 +91,10 @@ import userStore from "../../scripts/userStore.js";
       stream.getTracks().forEach((track) => track.stop());
     }
     selfieBlock.classList.add("hidden");
+  }
+
+  function logout(_event) {
+    userService.logout(sessionId);
+    sessionStorage.removeItem("sessionId");
   }
 })();

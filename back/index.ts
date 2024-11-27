@@ -33,12 +33,26 @@ const server = createServer((req: IncomingMessage, resp: ServerResponse) => {
   );
 
   DIContainer.registerClass(
+    ModuleRegister.SESSION_REPOSITORY,
+    new SessionConcreteRepository()
+  );
+  DIContainer.registerClass(
+    ModuleRegister.SESSION_SERVICE,
+    new SessionConcreteService(
+      DIContainer.resolve(ModuleRegister.SESSION_REPOSITORY)
+    )
+  );
+
+  DIContainer.registerClass(
     ModuleRegister.USER_SERVICE,
     new UserConCreteService(DIContainer.resolve(ModuleRegister.USER_REPOSITORY))
   );
   DIContainer.registerClass(
     ModuleRegister.USER_CONTROLLER,
-    new UserController(DIContainer.resolve(ModuleRegister.USER_SERVICE))
+    new UserController(
+      DIContainer.resolve(ModuleRegister.USER_SERVICE),
+      DIContainer.resolve(ModuleRegister.SESSION_SERVICE)
+    )
   );
 
   DIContainer.registerClass(
@@ -51,17 +65,6 @@ const server = createServer((req: IncomingMessage, resp: ServerResponse) => {
     new AuthConcreteService(
       DIContainer.resolve(ModuleRegister.USER_SERVICE),
       DIContainer.resolve(ModuleRegister.EMAIL_SERVICE)
-    )
-  );
-
-  DIContainer.registerClass(
-    ModuleRegister.SESSION_REPOSITORY,
-    new SessionConcreteRepository()
-  );
-  DIContainer.registerClass(
-    ModuleRegister.SESSION_SERVICE,
-    new SessionConcreteService(
-      DIContainer.resolve(ModuleRegister.SESSION_REPOSITORY)
     )
   );
 
