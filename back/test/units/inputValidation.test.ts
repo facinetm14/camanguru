@@ -1,5 +1,5 @@
-import { isValidEmail } from "../../src/core/utils/inputValidation/email";
-import { hashPassword, isPasswordStrong } from "../../src/core/utils/password";
+import { isValidEmail } from "../../src/domain/utils/validation/email";
+import { hashPassword, isPasswordStrong } from "../../src/domain/utils/password";
 
 describe("Input validation test", () => {
   describe.skip("Validate email", () => {

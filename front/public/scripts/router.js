@@ -14,7 +14,7 @@ export const routeUrl = async () => {
 
   if (path.match(/^\/activate\//)) {
     localStorage.setItem("validationToken", path.split("/").at(-1));
-    return loadPage(routes.get("/"));
+    return (window.location.href = "/");
   }
 
   if (!routes.has(path)) {
