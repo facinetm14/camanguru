@@ -4,7 +4,7 @@ services:
     networks:
       - camagru-network
     ports:
-      - "5432:5432"
+      - "5439:5432"
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWD}
@@ -17,7 +17,7 @@ services:
       context: ./back
       dockerfile: Dockerfile
     ports:
-      - "127.0.0.1:5000:5000"
+      - "5004:5000"
     depends_on:
       - db
     env_file:
@@ -30,7 +30,7 @@ services:
       context: ./front
       dockerfile: Dockerfile
     ports:
-      - "127.0.0.1:3000:80"
+      - "3004:80"
     networks:
       - camagru-network
     environment:

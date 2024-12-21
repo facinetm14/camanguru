@@ -1,10 +1,11 @@
 import { pgClient } from "../../database/dataSource";
+import { User } from "../../domain/entity/User";
 import { UserUniqKeys, UserStatus } from "../../domain/enums/user.enums";
 import { UserRepository } from "../../domain/ports/userRepository";
 import { UserModel } from "../model/UserModel";
 
 export class UserConcreteRepository implements UserRepository {
-  async create(user: UserModel): Promise<any> {
+  async create(user: User): Promise<any> {
     const {
       id,
       username,

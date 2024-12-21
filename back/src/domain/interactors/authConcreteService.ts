@@ -8,10 +8,64 @@ import { AuthService } from "../../domain/usecases/authService";
 import { EmailService } from "../../domain/usecases/emailService";
 import { UserService } from "../../domain/usecases/userService";
 
+
+interface IEventDispatcher {
+  dispatch(event: IEvent): Promise<any>
+  dispatchAsync(event: IEvent): void
+}
+
+interface IEvent<T> {
+  getName(): string;
+  getPayload(): T;
+}
+
+class UserCreatedEvent implements IEvent<{ id: string, email: string}> {
+  public static const USER_CREATED = 'user.created';
+  getName(): string {
+    return UserCreatedEvent.USER_CREATED;
+  }
+  getPayload(): T {
+    return {
+      id: 1,
+      email: 'toto@example.com'
+    }
+  }
+}
+
+export abstract class DomainError extends Error {
+  constructor(errors: Record<string, any>) {
+    super(errors.message)
+  }
+}
+
+export class UserRegistrationError extends DomainError {
+
+}
+
+// nestjs
+class EventDispatcher implements IEventDispatcher {
+  constructor(private eventEmitter: EventEmitter2) {}
+
+  dispatch(event: IEvent): Promise<any> {
+    this.eventEmitter.emit(
+      event.getName(),
+      event.getPayload()
+    );
+  }
+  dispatchAsync(event: IEvent): void {}
+}
+
+class SendEmailWhenUserCreEventHandler {
+  @OnEvent(UserCreatedEvent.USER_CREATED)
+  handleOrderCreatedEvent(payload: UserCreatedEvent) {
+    // handle and process "OrderCreatedEvent" event
+  }
+}
+
 export class AuthConcreteService implements AuthService {
   constructor(
     private readonly userService: UserService,
-    private readonly emailService: EmailService
+    private readonly eventDispatcher: IEventDispatcher,
   ) {}
 
   async register(createUserDto: CreateUserDto): Promise<User> {
@@ -23,16 +77,18 @@ export class AuthConcreteService implements AuthService {
       );
 
       if (newUser) {
-        await this.emailService.sendConfirmationEmail(
-          createUserDto,
-          validationToken
-        );
+        this.eventDispatcher.dispatchAsync(new UserCreatedEvent(...));
       }
 
       return newUser;
     } catch (error) {
       console.log(error);
-      throw new Error("Error: user registration process failled");
+      throw new UserRegistrationError({
+        message: "Error: user registration process failled",
+        details: {
+          
+        }
+      });
     }
   }
 
@@ -45,7 +101,7 @@ export class AuthConcreteService implements AuthService {
       return this.userService.activateAccount(userByToken.id);
     }
 
-    throw new Error("Error: Invalid token");
+    throw new InvalidCredentialsError("Error: Invalid token");
   }
 
   async signin(loginUserDto: LoginUserDto): Promise<string | null> {

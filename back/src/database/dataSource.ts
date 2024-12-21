@@ -6,7 +6,7 @@ export const pgClient = new Pool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWD,
   host: process.env.DB_HOST,
-  port: +(process.env.DB_PORT ?? "5432"),
+  port: +(process.env.DB_PORT ?? "5439"),
   database: process.env.DB_NAME,
 });
 
